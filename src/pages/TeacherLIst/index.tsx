@@ -11,6 +11,9 @@ import TeacherItem ,{Teacher } from '../../components/TeacherItem'
 
 
 
+
+
+
 function TeacherList() {
 
 
@@ -24,19 +27,25 @@ function TeacherList() {
     async function searchTeachers(e: FormEvent) {
 
         e.preventDefault()
-
+        const token = localStorage.getItem('token')
+        console.log(token)
        const response =  await api.get("classes", {
             params : {
                 subject,
                 week_day,
                 time
+            },
+            headers: {
+                authorization: `Bearer ${token} `
             }
         }
 
         
         )
-
+        
         setTeacher(response.data)
+
+        
 
     }
     return (
@@ -106,7 +115,7 @@ function TeacherList() {
             <main>
                {Teacher.map((teacher: Teacher) => {
                    return (
-                        <TeacherItem key={teacher.id} teacher={teacher}/>
+                        <TeacherItem key={teacher.id} teacher={teacher} />
                    )
                })}
             </main>

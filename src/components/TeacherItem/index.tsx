@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { FormEvent } from 'react'
 import whatsappIcon from '../../assets/icons/whatsapp.svg'
 import './styles.css'
 import api from '../../services/api'
+import axios from 'axios'
 
 export interface Teacher {
     id: number
@@ -26,12 +27,18 @@ const TeacherItem: React.FC<ItemProps> = (props) =>  {
 
         api.post('connections',{
             user_id: props.teacher.id
+            
         })
     }
+
+
+        
+        const token = localStorage.getItem('token')
+        
     return(
     <article className="teacher-item">
                     <header>
-                        <img src={props.teacher.avatar} alt={props.teacher.name}/>
+                        <img src={`${props.teacher.avatar}?token=${token}`} alt={props.teacher.name}/>
                         <div>
                             <strong>
                             {props.teacher.name}
