@@ -1,6 +1,9 @@
 import React, { useState, FormEvent} from 'react'
 import Checkbox from '@material-ui/core/Checkbox'
 import {Link, useHistory} from 'react-router-dom'
+import crypt from 'crypto-js'
+
+
 
 
 import eyeIcon from '../../assets/icons/eye.svg'
@@ -29,17 +32,40 @@ const Login = () => {
     async function SubmitForm(e: FormEvent) {
         e.preventDefault()
 
-        const auth = await api.post('auth', {
-            email,
-            password
-        })
 
-        console.log(auth.data)
+        try{
+            var auth = await api.post('auth', {
+                email,
+                password
+            })
 
-        localStorage.setItem('token', auth.data)
+
+            var cryptedToken = crypt.AES.encrypt(auth.data, "1d5d31da4f4021c6824de0a3f6d583f5").toString()
+            
+
+            
+
+        if(!check) {
+            sessionStorage.setItem('94a08da1fecbb6e8b46990538c7b50b2', cryptedToken)
+        } else {
+            localStorage.setItem('94a08da1fecbb6e8b46990538c7b50b2',cryptedToken)
+        }
+
         
 
         history.push('/study')
+    
+            
+        } catch (err) {
+
+            if(err) {
+                window.alert("Verifique Email e/ou Senha, ele(s) pode(m) estar incorreto(s)")
+            }
+        }
+        
+
+        
+
 
     }
 

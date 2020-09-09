@@ -2,11 +2,11 @@ import React, { FormEvent } from 'react'
 import whatsappIcon from '../../assets/icons/whatsapp.svg'
 import './styles.css'
 import api from '../../services/api'
-import axios from 'axios'
+
 
 export interface Teacher {
     id: number
-    avatar: string
+    avatar_url: string
     name: string
     subject: string
     bio: string
@@ -38,7 +38,7 @@ const TeacherItem: React.FC<ItemProps> = (props) =>  {
     return(
     <article className="teacher-item">
                     <header>
-                        <img src={`${props.teacher.avatar}?token=${token}`} alt={props.teacher.name}/>
+                        <img src={props.teacher.avatar_url} alt={props.teacher.name}/>
                         <div>
                             <strong>
                             {props.teacher.name}

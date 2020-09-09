@@ -5,6 +5,8 @@ import Input from '../../components/input'
 import Select from '../../components/select'
 import api from '../../services/api'
 import TeacherItem ,{Teacher } from '../../components/TeacherItem'
+import crypt from 'crypto-js'
+import { useHistory } from 'react-router-dom'
 
 
 
@@ -23,27 +25,69 @@ function TeacherList() {
     const [time, settime] = useState("")
     const [Teacher, setTeacher] = useState([])
 
+    const history = useHistory()
+
 
     async function searchTeachers(e: FormEvent) {
 
         e.preventDefault()
-        const token = localStorage.getItem('token')
-        console.log(token)
-       const response =  await api.get("classes", {
-            params : {
-                subject,
-                week_day,
-                time
-            },
-            headers: {
-                authorization: `Bearer ${token} `
-            }
-        }
 
         
-        )
+       
+       try{
+        const cryptedtoken: any = localStorage.getItem('94a08da1fecbb6e8b46990538c7b50b2')|| sessionStorage.getItem('94a08da1fecbb6e8b46990538c7b50b2')
         
-        setTeacher(response.data)
+        if( cryptedtoken !== null) {
+            
+            let token = crypt.AES.decrypt(cryptedtoken, "1d5d31da4f4021c6824de0a3f6d583f5").toString(crypt.enc.Utf8)
+           
+
+            const response =  await api.get("classes", {
+                params : {
+                    subject,
+                    week_day,
+                    time
+                },
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+            }
+    
+            
+            )
+            
+            setTeacher(response.data)
+            
+        } else {
+            const response =  await api.get("classes", {
+                params : {
+                    subject,
+                    week_day,
+                    time
+                },
+                headers: {
+                    authorization: `Bearer`
+                }
+            })
+        }
+
+      
+        
+
+        
+       } catch (err) {
+           console.log(err.toString())
+            if(err.toString() === "Error: Request failed with status code 403") {
+                alert('Proffy não foi achado, tente com outros dados')
+            }  else if (err.toString() === "Error: Request failed with status code 401"){
+                alert('Você precisa está logado para proucurar Proffys')
+                history.push('/auth')
+            } else if (err.toString() === "Error: Request failed with status code 400"){
+                alert('Preencha todos os campos')
+            }
+       }
+         
+        
 
         
 
