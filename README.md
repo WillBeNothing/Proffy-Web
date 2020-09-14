@@ -12,7 +12,7 @@ Converse e contrate um Porrfy agora mesmo
 Layout limpo e charmoso
 
 Link repositório Proffy-WEB : 
-https://github.com/william4823/Proffy-Mobilr
+https://github.com/william4823/Proffy-Mobile
 
 Link repositório Proffy-SERVER: 
 https://github.com/william4823/Proffy-Server
