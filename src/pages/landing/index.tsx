@@ -7,17 +7,39 @@ import purpleHeartIcon from '../../assets/icons/purple-heart.svg'
 
 import './style.css'
 import React, { useState, useEffect} from 'react'
+import {useHistory} from 'react-router-dom'
 import api from '../../services/api'
 
 function Landing() {
     const [TotalConnections, setTotalConnections] = useState(0)
+    const [StudySRC, setStudySRC] =useState(true)
+    const history = useHistory() 
+
+async function CheckLogin() {
+    
+    const cryptedtoken: any = localStorage.getItem('94a08da1fecbb6e8b46990538c7b50b2')|| sessionStorage.getItem('94a08da1fecbb6e8b46990538c7b50b2')
+
+
+        if(cryptedtoken !== null) {
+            setStudySRC(true)
+       } else {
+           setStudySRC(false);
+       }
+    
+}
 
     useEffect(() => {
         api.get('connections').then(res => {
             const {total} = res.data
             setTotalConnections(total)
         })
+        CheckLogin()
     }, [])
+
+        
+        
+        
+    
 
    
    
@@ -34,12 +56,12 @@ function Landing() {
                 <img src={landingImg} alt="Plataforma de estudos" 
                 className="hero-image"/>
 
-                <div className="buttons-container">
-                    <Link to="/study" className= "study">
+                <div className="buttons-container" >
+                    <Link to={StudySRC ? "/study" : "/auth" } className= "study" >
                         <img src={studyIcon} alt="estudar"/>
                         Estudar
                         </Link>
-                       <Link to="/teach" className= "give-classes">
+                       <Link to={StudySRC ? "/teach" : "/auth" } className= "give-classes">
                         <img src={giveClassesIcon} alt="estudar"/>
                         Dar Aulas
                     </Link>
